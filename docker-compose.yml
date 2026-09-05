@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: smartbuilding
+      POSTGRES_USER: smartbuilding
+      POSTGRES_PASSWORD: smartbuilding
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smartbuilding -d smartbuilding"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes: [postgres_data:/var/lib/postgresql/data]
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://smartbuilding:smartbuilding@db:5432/smartbuilding
+    ports: ["8000:8000"]
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  postgres_data:

@@ -1,0 +1,3 @@
+import uvicorn
+
+uvicorn.run("smartbuilding.api.main:app", host="0.0.0.0", port=8000)
